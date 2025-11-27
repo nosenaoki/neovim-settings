@@ -1,0 +1,23 @@
+# lazy.nvim 関連
+lazy-lock.json
+
+# スペルファイル
+spell/
+
+# Neovim セッション
+Session.vim
+
+# ローカル設定（個人用の上書き設定）
+lua/user/local.lua
+
+# バックアップ・スワップ・Undo
+*.swp
+*.swo
+*~
+
+# OS 関連
+.DS_Store
+Thumbs.db
+
+# 旧設定のバックアップ
+*.bak
