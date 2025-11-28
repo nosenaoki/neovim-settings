@@ -123,6 +123,21 @@ require("lazy").setup({
       require("user.plugins.lsp")
     end,
   },
+
+  -- ===========================================================================
+  -- Markdown サポート
+  -- ===========================================================================
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown" },  -- Markdownファイルで遅延読み込み
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("user.plugins.markdown")
+    end,
+  },
 }, {
   -- lazy.nvim 自体の設定
   ui = {
