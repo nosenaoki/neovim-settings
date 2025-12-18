@@ -41,6 +41,19 @@ require("lazy").setup({
       { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
       { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
+      { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help Tags" },
+      { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files" },
+      -- Git
+      { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Git Status" },
+      { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Git Commits" },
+      { "<leader>gb", "<cmd>Telescope git_branches<cr>", desc = "Git Branches" },
+      -- LSP
+      { "<leader>ws", "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Workspace Symbols" },
+      { "<leader>ds", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document Symbols" },
+      { "<leader>dw", "<cmd>Telescope diagnostics<cr>", desc = "Workspace Diagnostics" },
+      -- その他
+      { "<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History" },
+      { "<leader>/", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Fuzzy Find in Buffer" },
     },
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
