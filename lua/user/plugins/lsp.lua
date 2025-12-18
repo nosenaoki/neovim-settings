@@ -123,6 +123,50 @@ api.nvim_create_autocmd("FileType", {
 })
 
 -- -----------------------------------------------------------------------------
+-- Python (pyright) LSP 設定
+-- -----------------------------------------------------------------------------
+
+api.nvim_create_autocmd("FileType", {
+  pattern = "python",
+  group = lsp_group,
+  callback = function(ev)
+    local file_dir = vim.fs.dirname(ev.file)
+
+    -- pyproject.toml, setup.py, requirements.txt を探してルートを決定
+    local root_markers = vim.fs.find(
+      { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
+      { upward = true, path = file_dir }
+    )[1]
+
+    local root_dir = nil
+    if root_markers then
+      root_dir = vim.loop.fs_realpath(vim.fs.dirname(root_markers))
+    else
+      root_dir = vim.loop.fs_realpath(file_dir)
+    end
+
+    -- LSP 起動
+    vim.lsp.start({
+      name = "pyright",
+      cmd = { "pyright-langserver", "--stdio" },
+      root_dir = root_dir,
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = {
+        python = {
+          analysis = {
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+            diagnosticMode = "workspace",
+            typeCheckingMode = "basic", -- "off", "basic", "strict"
+          },
+        },
+      },
+    })
+  end,
+})
+
+-- -----------------------------------------------------------------------------
 -- TypeScript / React (typescript-language-server) LSP 設定
 -- -----------------------------------------------------------------------------
 

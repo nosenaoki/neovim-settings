@@ -31,6 +31,7 @@ opt.scrolloff = 8          -- スクロール時の余白
 opt.backup = false         -- バックアップファイルを作らない
 opt.swapfile = false       -- スワップファイルを作らない
 opt.undofile = true        -- Undo履歴を永続化
+opt.autoread = true        -- 外部変更を自動読込
 
 -- クリップボード（システムと共有）
 opt.clipboard = "unnamedplus"

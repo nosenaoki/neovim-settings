@@ -24,6 +24,7 @@ require("lazy").setup({
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("user.plugins.treesitter")
     end,
@@ -35,6 +36,12 @@ require("lazy").setup({
   {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.8",
+    cmd = "Telescope",  -- :Telescope コマンド実行時に読み込み
+    keys = {
+      { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
+      { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
+      { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
+    },
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("user.plugins.telescope")
@@ -46,6 +53,7 @@ require("lazy").setup({
   -- ===========================================================================
   {
     "lewis6991/gitsigns.nvim",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("user.plugins.gitsigns")
     end,
@@ -72,19 +80,20 @@ require("lazy").setup({
       require("user.plugins.colorscheme")
     end,
   },
+
   -- ===========================================================================
   -- 自動補完 (nvim-cmp)
   -- ===========================================================================
   {
     "hrsh7th/nvim-cmp",
-    event = "InsertEnter",  -- 挿入モードで遅延読み込み
+    event = "InsertEnter",
     dependencies = {
-      "hrsh7th/cmp-nvim-lsp",     -- LSP からの補完
-      "hrsh7th/cmp-buffer",       -- バッファ内の単語
-      "hrsh7th/cmp-path",         -- ファイルパス
-      "hrsh7th/cmp-cmdline",      -- コマンドライン補完
-      "L3MON4D3/LuaSnip",         -- スニペットエンジン（必須）
-      "saadparwaiz1/cmp_luasnip", -- LuaSnip との連携
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
     },
     config = function()
       require("user.plugins.cmp")
@@ -107,6 +116,7 @@ require("lazy").setup({
   -- ===========================================================================
   {
     "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",  -- 起動後に遅延読み込み
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("user.plugins.lualine")
@@ -114,11 +124,12 @@ require("lazy").setup({
   },
 
   -- ===========================================================================
-  -- LSP（カスタム設定、プラグイン不要）
+  -- LSP（カスタム設定）
   -- ===========================================================================
   {
     dir = vim.fn.stdpath("config") .. "/lua/user/plugins",
     name = "lsp-config",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("user.plugins.lsp")
     end,
@@ -129,7 +140,7 @@ require("lazy").setup({
   -- ===========================================================================
   {
     "MeanderingProgrammer/render-markdown.nvim",
-    ft = { "markdown" },  -- Markdownファイルで遅延読み込み
+    ft = { "markdown" },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons",
@@ -138,16 +149,44 @@ require("lazy").setup({
       require("user.plugins.markdown")
     end,
   },
+
+  -- ===========================================================================
+  -- Oil.nvim（ファイラー）
+  -- ===========================================================================
+  {
+    "stevearc/oil.nvim",
+    cmd = "Oil",  -- :Oil コマンド実行時に読み込み
+    keys = {
+      { "-", "<cmd>Oil<cr>", desc = "Open Oil" },
+    },
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("user.plugins.oil")
+    end,
+  },
 }, {
-  -- lazy.nvim 自体の設定
   ui = {
     border = "rounded",
   },
   checker = {
-    enabled = true,      -- プラグイン更新チェック
-    notify = false,      -- 通知は出さない
+    enabled = false,  -- 起動時の更新チェックを無効化
   },
   change_detection = {
-    notify = false,      -- 設定変更時の通知を抑制
+    notify = false,
+  },
+  performance = {
+    rtp = {
+      -- 不要な組み込みプラグインを無効化
+      disabled_plugins = {
+        "gzip",
+        "matchit",
+        "matchparen",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
   },
 })
