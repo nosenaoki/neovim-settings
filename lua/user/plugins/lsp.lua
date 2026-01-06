@@ -5,11 +5,18 @@
 local api = vim.api
 local lsp_group = api.nvim_create_augroup("UserLspConfig", { clear = true })
 
--- nvim-cmp の LSP 補完機能を取得（プラグインが読み込まれていない場合は空テーブル）
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-local cmp_nvim_lsp_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-if cmp_nvim_lsp_ok then
-  capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
+-- capabilities を遅延取得（LSP起動時に初めて取得）
+local _capabilities = nil
+local function get_capabilities()
+  if _capabilities then
+    return _capabilities
+  end
+  _capabilities = vim.lsp.protocol.make_client_capabilities()
+  local cmp_nvim_lsp_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+  if cmp_nvim_lsp_ok then
+    _capabilities = cmp_nvim_lsp.default_capabilities(_capabilities)
+  end
+  return _capabilities
 end
 
 -- -----------------------------------------------------------------------------
@@ -45,13 +52,14 @@ vim.diagnostic.config({
 local function on_attach(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
   local keymap = vim.keymap.set
-  local telescope = require("telescope.builtin")
 
   -- 定義・参照
   keymap("n", "gd", vim.lsp.buf.definition, opts)
   keymap("n", "gD", vim.lsp.buf.declaration, opts)
   keymap("n", "gi", vim.lsp.buf.implementation, opts)
-  keymap("n", "gr", telescope.lsp_references, opts)
+  keymap("n", "gr", function()
+    require("telescope.builtin").lsp_references()
+  end, opts)
   keymap("n", "gt", vim.lsp.buf.type_definition, opts)
 
   -- 情報表示
@@ -117,7 +125,7 @@ api.nvim_create_autocmd("FileType", {
       cmd = cmd,
       root_dir = root_dir,
       on_attach = on_attach,
-      capabilities = capabilities,
+      capabilities = get_capabilities(),
     })
   end,
 })
@@ -151,7 +159,7 @@ api.nvim_create_autocmd("FileType", {
       cmd = { "pyright-langserver", "--stdio" },
       root_dir = root_dir,
       on_attach = on_attach,
-      capabilities = capabilities,
+      capabilities = get_capabilities(),
       settings = {
         python = {
           analysis = {
@@ -195,7 +203,7 @@ api.nvim_create_autocmd("FileType", {
       cmd = { "typescript-language-server", "--stdio" },
       root_dir = root_dir,
       on_attach = on_attach,
-      capabilities = capabilities,
+      capabilities = get_capabilities(),
       init_options = {
         preferences = {
           -- import 時のパス形式

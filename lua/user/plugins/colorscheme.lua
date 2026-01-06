@@ -2,32 +2,32 @@
 -- カラースキーム設定
 -- =============================================================================
 
--- Gruvbox Material
-vim.g.gruvbox_material_background = "medium"
-vim.g.gruvbox_material_enable_bold = 1
-vim.g.gruvbox_material_enable_italic = 1
+-- 使用するテーマを選択（"gruvbox-material", "kanagawa", "tokyonight"）
+local theme = "gruvbox-material"
 
--- Kanagawa
-require("kanagawa").setup({
-  commentStyle = { italic = true },
-  keywordStyle = { italic = true },
-  theme = "wave",  -- "wave", "dragon", "lotus"
-})
+-- テーマ別設定
+if theme == "gruvbox-material" then
+  vim.g.gruvbox_material_background = "medium"
+  vim.g.gruvbox_material_enable_bold = 1
+  vim.g.gruvbox_material_enable_italic = 1
 
--- Tokyonight
-require("tokyonight").setup({
-  style = "night",  -- "storm", "moon", "night", "day"
-  transparent = false,
-  styles = {
-    comments = { italic = true },
-    keywords = { italic = true },
-  },
-})
+elseif theme == "kanagawa" then
+  require("kanagawa").setup({
+    commentStyle = { italic = true },
+    keywordStyle = { italic = true },
+    theme = "wave",  -- "wave", "dragon", "lotus"
+  })
 
--- =============================================================================
--- テーマ適用（使いたいものをコメント解除）
--- =============================================================================
+elseif theme == "tokyonight" then
+  require("tokyonight").setup({
+    style = "night",  -- "storm", "moon", "night", "day"
+    transparent = false,
+    styles = {
+      comments = { italic = true },
+      keywords = { italic = true },
+    },
+  })
+end
 
-vim.cmd.colorscheme("gruvbox-material")
--- vim.cmd.colorscheme("kanagawa")
--- vim.cmd.colorscheme("tokyonight")
+-- テーマ適用
+vim.cmd.colorscheme(theme)

@@ -66,7 +66,7 @@ require("lazy").setup({
   -- ===========================================================================
   {
     "lewis6991/gitsigns.nvim",
-    event = { "BufReadPost", "BufNewFile" },
+    event = "VeryLazy",  -- 起動後に遅延読み込み（パフォーマンス改善）
     config = function()
       require("user.plugins.gitsigns")
     end,
@@ -79,19 +79,17 @@ require("lazy").setup({
     "sainnhe/gruvbox-material",
     lazy = false,
     priority = 1000,
-  },
-  {
-    "rebelot/kanagawa.nvim",
-    lazy = false,
-    priority = 1000,
-  },
-  {
-    "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
     config = function()
       require("user.plugins.colorscheme")
     end,
+  },
+  {
+    "rebelot/kanagawa.nvim",
+    lazy = true,  -- 使用時のみ読み込み
+  },
+  {
+    "folke/tokyonight.nvim",
+    lazy = true,  -- 使用時のみ読み込み
   },
 
   -- ===========================================================================
