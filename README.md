@@ -20,6 +20,7 @@ Lua ベースの Neovim 設定ファイル。
 |------|-----|--------------|
 | C# | csharp-ls | `dotnet tool install -g csharp-ls` |
 | TypeScript/React | typescript-language-server | `npm install -g typescript-language-server typescript` |
+| Go | gopls | `go install golang.org/x/tools/gopls@latest` |
 
 ## セットアップ
 
@@ -30,6 +31,7 @@ git clone <your-repo> "$env:LOCALAPPDATA\nvim"
 # 2. LSP サーバーをインストール
 dotnet tool install -g csharp-ls
 npm install -g typescript-language-server typescript
+go install golang.org/x/tools/gopls@latest
 
 # 3. Neovim を起動（プラグインが自動インストールされる）
 nvim

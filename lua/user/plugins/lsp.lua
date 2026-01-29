@@ -229,3 +229,58 @@ api.nvim_create_autocmd("FileType", {
     })
   end,
 })
+
+-- -----------------------------------------------------------------------------
+-- Go (gopls) LSP 設定
+-- -----------------------------------------------------------------------------
+
+api.nvim_create_autocmd("FileType", {
+  pattern = "go",
+  group = lsp_group,
+  callback = function(ev)
+    local file_dir = vim.fs.dirname(ev.file)
+
+    -- go.work, go.mod, .git を探してルートを決定
+    local root_markers = vim.fs.find(
+      { "go.work", "go.mod", ".git" },
+      { upward = true, path = file_dir }
+    )[1]
+
+    local root_dir = nil
+    if root_markers then
+      root_dir = vim.loop.fs_realpath(vim.fs.dirname(root_markers))
+    else
+      root_dir = vim.loop.fs_realpath(file_dir)
+    end
+
+    -- LSP 起動
+    vim.lsp.start({
+      name = "gopls",
+      cmd = { "gopls" },
+      root_dir = root_dir,
+      on_attach = on_attach,
+      capabilities = get_capabilities(),
+      settings = {
+        gopls = {
+          gofumpt = true,
+          staticcheck = true,
+          usePlaceholders = true,
+          completeUnimported = true,
+          analyses = {
+            unusedparams = true,
+            shadow = true,
+            nilness = true,
+            unusedwrite = true,
+            unusedvariable = true,
+          },
+          hints = {
+            assignVariableTypes = true,
+            compositeLiteralFields = true,
+            constantValues = true,
+            parameterNames = true,
+          },
+        },
+      },
+    })
+  end,
+})
