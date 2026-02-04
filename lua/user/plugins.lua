@@ -35,7 +35,7 @@ require("lazy").setup({
   -- ===========================================================================
   {
     "nvim-telescope/telescope.nvim",
-    branch = "0.1.x",  -- 最新の 0.1.x を使用（Neovim 0.10+ 対応）
+    version = "0.2.1",  -- Neovim 0.11+ 対応
     cmd = "Telescope",  -- :Telescope コマンド実行時に読み込み
     keys = {
       { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
