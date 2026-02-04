@@ -36,6 +36,21 @@ opt.autoread = true        -- 外部変更を自動読込
 -- クリップボード（システムと共有）
 opt.clipboard = "unnamedplus"
 
+-- SSH環境でクリップボードプロバイダーがない場合、OSC 52を使用
+if vim.env.SSH_TTY then
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    },
+    paste = {
+      ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+    },
+  }
+end
+
 -- 分割ウィンドウ
 opt.splitbelow = true      -- 水平分割は下に
 opt.splitright = true      -- 垂直分割は右に
