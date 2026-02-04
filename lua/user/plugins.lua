@@ -23,6 +23,7 @@ require("lazy").setup({
   -- ===========================================================================
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",  -- 新 API（main ブランチ）を使用
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
     config = function()

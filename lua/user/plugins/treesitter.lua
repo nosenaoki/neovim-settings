@@ -1,40 +1,41 @@
 -- =============================================================================
--- Treesitter 設定
+-- Treesitter 設定 (新 API 対応)
 -- =============================================================================
 
-require("nvim-treesitter.configs").setup({
-  -- インストールする言語
-  ensure_installed = {
-    "c_sharp",
-    "lua",
-    "vim",
-    "vimdoc",
-    "markdown",
-    "markdown_inline",
-    "json",
-    "yaml",
-    "html",
-    "css",
-    "javascript",
-    "typescript",
-    "tsx",
-    "jsdoc",
-  },
+local treesitter = require("nvim-treesitter")
 
-  -- 同期インストール（false推奨）
-  sync_install = false,
+-- 基本設定
+treesitter.setup()
 
-  -- 自動インストール
-  auto_install = true,
+-- インストールする言語
+local languages = {
+  "c_sharp",
+  "lua",
+  "vim",
+  "vimdoc",
+  "markdown",
+  "markdown_inline",
+  "json",
+  "yaml",
+  "html",
+  "css",
+  "javascript",
+  "typescript",
+  "tsx",
+  "jsdoc",
+  "go",
+}
 
-  -- ハイライト
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
+-- パーサーのインストール（未インストールの場合のみ）
+treesitter.install(languages)
 
-  -- インデント
-  indent = {
-    enable = true,
-  },
+-- FileType autocmd でハイライト・インデントを有効化
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = languages,
+  callback = function()
+    -- treesitter ハイライトを有効化
+    pcall(vim.treesitter.start)
+    -- treesitter インデントを有効化
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
 })
